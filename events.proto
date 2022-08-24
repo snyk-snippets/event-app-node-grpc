@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+service EventService {
+    rpc GetAllEvents (Empty) returns (EventList) {}
+    rpc GetEvent (EventId) returns (Event) {}
+    rpc CreateEvent (Event) returns (Event) {}
+    rpc UpdateEvent (Event) returns (Event) {}
+    rpc DeleteEvent (EventId) returns (Empty) {}
+}
+
+message Empty {}
+
+message Event {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string location = 4;
+    string duration = 5;
+    int32 lucky_number = 6;
+    string status = 7;
+}
+
+message EventList {
+    repeated Event events = 1;
+}
+
+message EventId {
+    string id = 1;
+}

@@ -1,0 +1,18 @@
+{
+  "name": "event-app-node-grpc",
+  "version": "1.0.0",
+  "description": "A CRUD aplication to demonstrate the use of gRPC with NodeJS",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "generate:certs": "./scripts/generate-certs.sh"
+  },
+  "author": "(author name here)",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.6.12",
+    "express": "^4.18.1",
+    "grpc": "^1.24.11",
+    "uuid": "^8.3.2"
+  }
+}
