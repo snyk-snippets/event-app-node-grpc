@@ -98,8 +98,10 @@ server.addService(eventsProto.EventService.service, {
 });
 
 //creating insecure connection without encryption
-//server.bind("127.0.0.1:50051", grpc.ServerCredentials.createInsecure());
-//console.log("Server listening at http://127.0.0.1:50051");
+// server.bindAsync("127.0.0.1:50051", grpc.ServerCredentials.createInsecure(), (error, port) => {
+// 	console.log(`Server listening at http://127.0.0.1:${port}`);
+// 	server.start();
+// });
 server.bindAsync("0.0.0.0:50051", credentials, (error, port) => {
 	console.log(`Server listening at http://0.0.0.0:${port}`);
 	server.start();
