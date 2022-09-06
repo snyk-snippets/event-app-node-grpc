@@ -21,7 +21,7 @@ let credentials = grpc.ServerCredentials.createSsl(
 		private_key: fs.readFileSync('./certs/server.key')
 	}], true);
 
-const { v4: uuidv4 } = require("uuid");
+const { randomUUID } = require("node:crypto");
 const events = [
 	{
 		id: "34415c7c-f82d-4e44-88ca-ae2a1aaa92b7",
@@ -56,7 +56,7 @@ server.addService(eventsProto.EventService.service, {
 	createEvent: (call, callback) => {
 		let event = call.request;
 
-		event.id = uuidv4();
+		event.id = randomUUID();
 		events.push(event);
 		callback(null, event);
 	},
