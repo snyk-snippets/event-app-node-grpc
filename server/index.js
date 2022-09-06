@@ -1,7 +1,7 @@
 const PROTO_PATH = "./events.proto";
 const fs = require('fs');
 
-let grpc = require("grpc");
+let grpc = require("@grpc/grpc-js");
 let protoLoader = require("@grpc/proto-loader");
 
 let packageDefinition = protoLoader.loadSync(PROTO_PATH, {
@@ -16,12 +16,12 @@ let eventsProto = grpc.loadPackageDefinition(packageDefinition);
 const server = new grpc.Server();
 
 let credentials = grpc.ServerCredentials.createSsl(
-    fs.readFileSync('./certs/ca.crt'), [{
-    cert_chain: fs.readFileSync('./certs/server.crt'),
-    private_key: fs.readFileSync('./certs/server.key')
-}], true);
+	fs.readFileSync('./certs/ca.crt'), [{
+		cert_chain: fs.readFileSync('./certs/server.crt'),
+		private_key: fs.readFileSync('./certs/server.key')
+	}], true);
 
-const { v4: uuidv4 } = require("uuid");
+const { randomUUID } = require("node:crypto");
 const events = [
 	{
 		id: "34415c7c-f82d-4e44-88ca-ae2a1aaa92b7",
@@ -56,7 +56,7 @@ server.addService(eventsProto.EventService.service, {
 	createEvent: (call, callback) => {
 		let event = call.request;
 
-		event.id = uuidv4();
+		event.id = randomUUID();
 		events.push(event);
 		callback(null, event);
 	},
@@ -98,8 +98,11 @@ server.addService(eventsProto.EventService.service, {
 });
 
 //creating insecure connection without encryption
-//server.bind("127.0.0.1:50051", grpc.ServerCredentials.createInsecure());
-//console.log("Server listening at http://127.0.0.1:50051");
-server.bind("0.0.0.0:50051", credentials);
-console.log("Server listening at http://0.0.0.0:50051");
-server.start();
+// server.bindAsync("127.0.0.1:50051", grpc.ServerCredentials.createInsecure(), (error, port) => {
+// 	console.log(`Server listening at http://127.0.0.1:${port}`);
+// 	server.start();
+// });
+server.bindAsync("0.0.0.0:50051", credentials, (error, port) => {
+	console.log(`Server listening at http://0.0.0.0:${port}`);
+	server.start();
+});
